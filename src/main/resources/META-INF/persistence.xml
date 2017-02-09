@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+    <persistence-unit name="xsharing-db">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:jboss/datasources/xSharingDS</jta-data-source>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <shared-cache-mode>ALL</shared-cache-mode>
+        <properties>
+            <property name="hibernate.connection.driver_class" value="org.postgis.DriverWrapper" />
+            <property name="hibernate.connection.url" value="jdbc:postgresql_postGIS://localhost:5432/xsharing" />
+            <property name="hibernate.connection.username" value="changeme" />
+            <property name="hibernate.connection.password" value="changeme" />
+
+            <property name="hibernate.dialect" value="org.hibernate.spatial.dialect.postgis.PostgisDialect" />
+            <property name="hibernate.bytecode.use_reflection_optimizer" value="true"/>
+            <property name="hibernate.default_entity_mode" value="pojo"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.cache.region.factory_class" value="org.jboss.as.jpa.hibernate4.infinispan.InfinispanRegionFactory"/>
+            <property name="hibernate.cache.infinispan.cachemanager" value="java:jboss/infinispan/container/hibernate"/>
+            <property name="hibernate.transaction.manager_lookup_class" value="org.hibernate.transaction.JBossTransactionManagerLookup"/>
+            <property name="hibernate.cache.use_second_level_cache" value="true"/>
+            <property name="hibernate.jdbc.batch_size" value="100" />
+
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+    </persistence-unit>
+
+    <persistence-unit name="mb-adapter">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>java:jboss/datasources/MBDS</jta-data-source>
+        <properties>
+            <property name="hibernate.connection.driver_class" value="org.postgis.DriverWrapper" />
+            <property name="hibernate.connection.url" value="jdbc:postgresql_postgis://localhost:5432/mobility_broker_db" />
+            <property name="hibernate.connection.username" value="changeme"/>
+            <property name="hibernate.connection.password" value="changeme"/>
+            <property name="hibernate.dialect" value="org.hibernate.spatial.dialect.postgis.PostgisDialect" />
+        </properties>
+    </persistence-unit>
+</persistence>

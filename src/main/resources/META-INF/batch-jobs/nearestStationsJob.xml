@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job id="nearestStationsJob" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+     version="1.0" restartable="true">
+    <listeners>
+        <listener ref="NeighborsJobOperationListener" />
+    </listeners>
+    <step id="loadNeighbors">
+        <batchlet ref="NearestStationsBatchlet">
+            <properties>
+                <property name="start" value="#{partitionPlan['start']}"/>
+                <property name="end" value="#{partitionPlan['end']}"/>
+            </properties>
+        </batchlet>
+        <partition>
+            <mapper ref="NeighborsMapper" />
+        </partition>
+        <end on="COMPLETED" exit-status="DONE_PROCESSING"/>
+    </step>
+    <step id="cleanUp">
+        <batchlet ref="CleanUpBatchlet"/>
+    </step>
+</job>

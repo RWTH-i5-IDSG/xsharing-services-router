@@ -1,0 +1,16 @@
+target
+out
+.idea
+*.iml
+.classpath
+.project
+.settings
+.DS_Store
+npm-debug.log*
+pids
+*.pid
+coverage
+grunt
+node_modules
+.npm
+git.properties

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="logPattern">[%-5p] %d %c (%t) - %m%n</Property>
+    </Properties>
+
+    <Appenders>
+        <RollingRandomAccessFile name="FILE"
+                                 fileName="${sys:jboss.server.log.dir}/xsharing-router.log"
+                                 filePattern="${sys:jboss.server.log.dir}/xsharing-router_log.%d{yyyy-MM-dd}-%i.gz"
+                                 immediateFlush="false"
+                                 append="true">
+            <PatternLayout pattern="${logPattern}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="50 MB"/>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy max="50"/>
+        </RollingRandomAccessFile>
+
+    </Appenders>
+    <Loggers>
+        <AsyncLogger name="de.rwth.idsg.xsharing.router" level="INFO"/>
+        <AsyncRoot level="INFO">
+            <AppenderRef ref="FILE"/>
+        </AsyncRoot>
+    </Loggers>
+</Configuration>

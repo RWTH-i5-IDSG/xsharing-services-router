@@ -1,0 +1,178 @@
+<div class="row">
+    <div class="col-md-8">
+        <nav class="navbar alert-info margin-top-20" style="margin-top: 20px">
+            <div class="navbar-header col-md-4">
+                <span class="navbar-brand">Status</span>
+            </div>
+            <div class="collapse navbar-collapse">
+                <div class="navbar-form navbar-left form-inline">
+                    <span class="h3"><span class="label label-success">{{sharingStatus.lifecycleStatus}}</span></span>
+                </div>
+            </div>
+        </nav>
+        <nav class="navbar navbar-default margin-top-20">
+            <div class="navbar-header col-md-4">
+                <span class="navbar-brand">Change Granularity</span>
+            </div>
+            <div class="collapse navbar-collapse">
+                <div class="navbar-form navbar-left form-inline">
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="sharingStatus.rasterGranularity"/>
+                    </div>
+                    <button type="button" class="btn btn-danger" ng-click="rebuildAll()">Reimport and Preprocess</button>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-success" style="margin-top: 20px">
+            <div class="panel-heading"><h3 class="panel-title">Misc. Stuff</h3></div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Route Leg Cache Size
+                        <button class="btn btn-danger btn-xs pull-right" ng-click="clearRouteLegCache()">Clear Cache</button>
+                    </td>
+                    <td>{{sharingStatus.routeLegCacheStats.cacheSize}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Send Message</h3></div>
+
+            <div class="panel-body">
+                <input type="text" class="form-control" placeholder="e.g., route id" ng-model="request.routeId"/>
+                <br>
+
+                <ul class="list-group" ng-model="dest">
+                    <li class="list-group-item" ng-repeat="dest in destinations">
+                        <a href="#" ng-click="destRequest(dest, routeId)">{{dest}}</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title">Send Routing Request</h3></div>
+
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">From: </label>
+                        <div class="form-inline">
+                            <input type="text" class="form-control" placeholder="lat" ng-model="request.from.y"/>
+                            <input type="text" class="form-control" placeholder="long" ng-model="request.from.x"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" >To: </label>
+                        <div class="form-inline">
+                            <input type="text" class="form-control" placeholder="lat" ng-model="request.to.y"/>
+                            <input type="text" class="form-control" placeholder="long" ng-model="request.to.x"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2">
+                            <button type="button" class="btn btn-primary" ng-click="routeRequest(request)">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading clearfix">
+        <span class="panel-title">Queue Stats </span>
+        <button class="btn btn-danger btn-xs pull-right" ng-click="resetQueueStats()">Reset</button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th># of In / Out</th>
+            <th>Min</th>
+            <th>Max</th>
+            <th>Avg</th>
+            <th>Sum</th>
+            <th>Collecting Since</th>
+            <th>Last Request Timestamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="status in sharingStatus.queueStats">
+            <td>{{status.name}}</td>
+            <td class="text-center">{{status.incomingCount}} / {{status.outGoingCount}}</td>
+            <td>{{status.min}}</td>
+            <td>{{status.max}}</td>
+            <td>{{status.avg}}</td>
+            <td>{{status.sum}}</td>
+            <td>{{status.collectingSince}}</td>
+            <td>{{status.lastRequestTimestamp}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading"><h3 class="panel-title">Current Cache Status</h3></div>
+    <div class="panel-body">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-primary" ng-click="getStatus()">
+                <span class="glyphicon glyphicon-refresh"></span>
+                Refresh Status
+            </button>
+            <button type="button" class="btn btn-primary" ng-click="getCacheKeys()">
+                <span class="glyphicon glyphicon-refresh"></span>
+                Refresh Content
+            </button>
+            <button type="button" class="btn btn-primary" ng-click="clearCache()">
+                Clear Cache
+            </button>
+        </div>
+        <div style="padding: 20px;">
+            <samp>{{sharingStatus.cacheStatus}}</samp>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <button class="btn btn-default" ng-click="toggleCacheKeys()">
+             <span class="glyphicon"
+                   ng-class="{'glyphicon-triangle-bottom': showCacheKeys,
+                   'glyphicon-triangle-right': !showCacheKeys}"></span> Show Cache-Keys
+        </button>
+        <div ng-hide="!showCacheKeys" style="padding: 20px;">
+            <samp>{{cacheKeys}}</samp>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <p class="text-right">
+        <a href="/xsharing/rest/control/log">Log</a> |
+        <a href="/xsharing/rest/control/commit">Commit Info</a>
+    </p>
+</footer>
+
+
+
