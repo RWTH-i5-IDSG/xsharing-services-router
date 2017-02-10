@@ -46,7 +46,7 @@ import java.util.List;
 import static de.rwth.idsg.xsharing.router.iv.util.EsriFactory.getCarRequestTuple;
 import static de.rwth.idsg.xsharing.router.iv.util.EsriFactory.getIvRequestTuple;
 import static de.rwth.idsg.xsharing.router.iv.util.EsriFactory.getPointFeature;
-import static de.rwth.idsg.xsharing.router.utils.BasicUtils.hasNoElements;
+import static de.rwth.idsg.xsharing.router.utils.BasicUtils.checkNullOrEmpty;
 import static de.rwth.idsg.xsharing.router.utils.BasicUtils.toGeoCoord;
 import static java.util.stream.Collectors.toList;
 
@@ -166,7 +166,7 @@ public class RouteBuilderServiceImpl implements RouteBuilderService {
     }
 
     private List<IVRequestTuple> buildTargetPoints(List<GeoCoord> ptStations) {
-        if (hasNoElements(ptStations)) {
+        if (checkNullOrEmpty(ptStations)) {
             return Collections.emptyList();
         }
 

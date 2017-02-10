@@ -16,6 +16,7 @@
  */
 package de.rwth.idsg.xsharing.router.core.routing.batch.neighbors;
 
+import de.rwth.idsg.xsharing.router.Constants;
 import de.rwth.idsg.xsharing.router.core.aggregation.raster.RasterManager;
 import de.rwth.idsg.xsharing.router.core.routing.batch.BatchManager;
 import de.rwth.idsg.xsharing.router.core.routing.batch.CustomBatchlet;
@@ -24,8 +25,6 @@ import de.rwth.idsg.xsharing.router.persistence.domain.raster.RasterPoint;
 import de.rwth.idsg.xsharing.router.persistence.domain.raster.station.BikeStationTuple;
 import de.rwth.idsg.xsharing.router.persistence.domain.raster.station.CarStationTuple;
 import de.rwth.idsg.xsharing.router.persistence.repository.StationRepository;
-import de.rwth.idsg.xsharing.router.Constants;
-import de.rwth.idsg.xsharing.router.utils.BasicUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.batch.api.BatchProperty;
@@ -39,6 +38,8 @@ import javax.inject.Named;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
+
+import static de.rwth.idsg.xsharing.router.utils.BasicUtils.checkNullOrEmpty;
 
 /**
  * Batchlet implementation for obtaining the nearest stations of each station and subsequently updating the raster
@@ -120,7 +121,7 @@ public class NearestStationsBatchlet extends CustomBatchlet {
 
     // determine if point is fetched from database -> skip fetching closest stations
     private static boolean hasStations(RasterPoint rp) {
-        boolean noStations = BasicUtils.hasNoElements(rp.getNearestBikeStations()) && BasicUtils.hasNoElements(rp.getNearestCarStations());
+        boolean noStations = checkNullOrEmpty(rp.getNearestBikeStations()) && checkNullOrEmpty(rp.getNearestCarStations());
         return !noStations;
     }
 

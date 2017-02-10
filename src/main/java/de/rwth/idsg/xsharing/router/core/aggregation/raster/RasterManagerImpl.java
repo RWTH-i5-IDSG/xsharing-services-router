@@ -48,7 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
 
-import static de.rwth.idsg.xsharing.router.utils.BasicUtils.hasNoElements;
+import static de.rwth.idsg.xsharing.router.utils.BasicUtils.checkNullOrEmpty;
 import static de.rwth.idsg.xsharing.router.utils.BasicUtils.isEqualXY;
 
 /**
@@ -413,7 +413,7 @@ public class RasterManagerImpl implements RasterManager {
     private void loadRaster(List<RasterPoint> databasePoints) {
 
         // if db is empty we need to create the raster
-        if (hasNoElements(databasePoints)) {
+        if (checkNullOrEmpty(databasePoints)) {
             log.info("No raster data in DB, creating new.");
             coreBootstrapper.setServerStatus(ServerStatus.COMPUTING);
             createRaster();

@@ -60,10 +60,6 @@ public final class BasicUtils {
         return (EARTH_RADIUS * c);
     }
 
-    public static boolean hasNoElements(Collection c) {
-        return c == null || c.isEmpty();
-    }
-
     public static boolean checkNullOrEmpty(Collection<?> col) {
         return (col == null) || col.isEmpty();
     }

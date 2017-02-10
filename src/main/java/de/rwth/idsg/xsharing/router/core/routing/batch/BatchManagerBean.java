@@ -23,7 +23,6 @@ import de.rwth.idsg.xsharing.router.iv.model.EsriPointFeature;
 import de.rwth.idsg.xsharing.router.iv.request.IVRequestTuple;
 import de.rwth.idsg.xsharing.router.persistence.domain.raster.RasterPoint;
 import de.rwth.idsg.xsharing.router.persistence.domain.routes.leg.LegType;
-import de.rwth.idsg.xsharing.router.utils.BasicUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.PostConstruct;
@@ -39,6 +38,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+
+import static de.rwth.idsg.xsharing.router.utils.BasicUtils.checkNullOrEmpty;
 
 /**
  * Batch job management bean responsible for dispatching job instances and storing all input data
@@ -75,7 +76,7 @@ public class BatchManagerBean implements BatchManager {
 
     @Override
     public void startCartesianMatrixJob(List<EsriPointFeature> sourcePoints, LegType legType) {
-        if (BasicUtils.hasNoElements(sourcePoints)) {
+        if (checkNullOrEmpty(sourcePoints)) {
             log.error("Will not start Cartesian Matrix job with invalid sourcePoints for leg type {}", legType);
             return;
         }
@@ -95,7 +96,7 @@ public class BatchManagerBean implements BatchManager {
 
     @Override
     public void startIVMatrixJob(IVRequestTuple request, LegType legType) {
-        if (BasicUtils.hasNoElements(request.getTargets())) {
+        if (checkNullOrEmpty(request.getTargets())) {
             log.error("Will not start IV Matrix job with invalid targets for leg type {}", legType);
             return;
         }
@@ -118,7 +119,7 @@ public class BatchManagerBean implements BatchManager {
 
     @Override
     public void startMatrixJob(List<IVRequestTuple> points, LegType legType) {
-        if (BasicUtils.hasNoElements(points)) {
+        if (checkNullOrEmpty(points)) {
             log.error("Will not start Matrix job with invalid points for leg type {}", legType);
             return;
         }
@@ -136,7 +137,7 @@ public class BatchManagerBean implements BatchManager {
 
     @Override
     public void startNeighborsJob(List<RasterPoint> rasterPoints) {
-        if (BasicUtils.hasNoElements(rasterPoints)) {
+        if (checkNullOrEmpty(rasterPoints)) {
             log.error("Will not start Neighbors job with invalid rasterPoints.");
             return;
         }
@@ -154,7 +155,7 @@ public class BatchManagerBean implements BatchManager {
     @Override
     public List<?> getJobSourceSublist(Long jobId, Integer from, Integer to) {
         List<EsriPointFeature> all = sourcePointStash.get(jobId);
-        if (BasicUtils.hasNoElements(all)) {
+        if (checkNullOrEmpty(all)) {
             return Collections.emptyList();
         }
         return all.subList(Math.min(all.size(), from), Math.min(all.size(), to));
@@ -163,7 +164,7 @@ public class BatchManagerBean implements BatchManager {
     @Override
     public List<EsriPointFeature> getCarTargetList(Long jobId, Integer from, Integer to) {
         List<EsriPointFeature> t = carTargetStash.get(jobId);
-        if (BasicUtils.hasNoElements(t)) {
+        if (checkNullOrEmpty(t)) {
             return Collections.emptyList();
         }
         return t.subList(Math.min(t.size(), from), Math.min(t.size(), to));
@@ -172,7 +173,7 @@ public class BatchManagerBean implements BatchManager {
     @Override
     public List<IVRequestTuple> getMatrixSublist(Long jobId, Integer from, Integer to) {
         List<IVRequestTuple> all = matrixStash.get(jobId);
-        if (BasicUtils.hasNoElements(all)) {
+        if (checkNullOrEmpty(all)) {
             return Collections.emptyList();
         }
         return all.subList(Math.min(all.size(), from), Math.min(all.size(), to));
@@ -181,7 +182,7 @@ public class BatchManagerBean implements BatchManager {
     @Override
     public List<RasterPoint> getRasterSublist(Long jobId, Integer from, Integer to) {
         List<RasterPoint> all = rasterStash.get(jobId);
-        if (BasicUtils.hasNoElements(all)) {
+        if (checkNullOrEmpty(all)) {
             return Collections.emptyList();
         }
         return all.subList(Math.min(all.size(), from), Math.min(all.size(), to));
